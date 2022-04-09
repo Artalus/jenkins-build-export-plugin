@@ -1,0 +1,8 @@
+version: "3.4"
+
+services:
+  maven:
+    build: .
+    volumes:
+      - ./:/usr/src/maven
+    entrypoint: tail -f /dev/null
