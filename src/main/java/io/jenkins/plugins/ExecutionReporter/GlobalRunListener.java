@@ -1,4 +1,4 @@
-package io.jenkins.plugins.sample;
+package io.jenkins.plugins.executionreporter;
 
 import hudson.Extension;
 import hudson.model.listeners.RunListener;
@@ -12,7 +12,7 @@ public class GlobalRunListener extends RunListener<Run<?, ?>> {
 
     @Override
     public void onCompleted(Run<?, ?> build, TaskListener listener) {
-        listener.getLogger().println("[ExecutionReporter] println");
-        logger.log(Level.WARNING, "log");
+        listener.getLogger().println("[ExecutionReporter] println ggg");
+        logger.log(Level.WARNING, "log ggg");
     }
 }

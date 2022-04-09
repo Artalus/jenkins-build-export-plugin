@@ -1,4 +1,4 @@
-package io.jenkins.plugins.sample;
+package io.jenkins.plugins.executionreporter;
 
 import hudson.Extension;
 import hudson.ExtensionList;
