@@ -1,0 +1,1 @@
+docker compose exec maven mvn hpi:run -Dhost=0.0.0.0

@@ -18,3 +18,7 @@ work
 
 .env
 .mvn/
+# maven cache with deps
+/.m2/
+#jenkins directory
+/work/

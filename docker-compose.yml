@@ -5,4 +5,12 @@ services:
     build: .
     volumes:
       - ./:/usr/src/maven
+      - ./.m2:/root/.m2
     entrypoint: tail -f /dev/null
+    ports:
+      - 8080:8080
+    networks:
+      - host
+
+networks:
+  host:
