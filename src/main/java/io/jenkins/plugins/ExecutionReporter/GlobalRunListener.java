@@ -3,6 +3,7 @@ package io.jenkins.plugins.executionreporter;
 import hudson.Extension;
 import hudson.model.listeners.RunListener;
 import hudson.model.*;
+import hudson.model.Action;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -50,33 +51,20 @@ public class GlobalRunListener extends RunListener<Run<?, ?>> {
             tree_data.add(new NodeData(node));
         }
         Collections.sort(tree_data);
-        Collections.reverse(tree_data);
 
         StringBuilder builder = new StringBuilder();
         for (NodeData d : tree_data) {
+            builder.append('\n');
             builder.append(stringize(d));
         }
         logger.info(
-            String.format("Build tree is:\n%s", builder.toString())
+            String.format("Build tree is:%s", builder.toString())
         );
-        // }
-        // //
-        // // tree_data.each{ def t ->
-        // //     if (t.parent)
-        // //         tree_datat[.parent.children] += t
-        // // }
-        // tree_data.sort { lhs, rhs -> lhs.id <=> rhs.id }
-        // tree_data = tree_data.reverse()
-        // tree_data.each {
-        //     println(stringize(it))
-        // }
 
         // println "---"
         // NNN.class.methods.each {
         // println "- $it.name (${it.parameters.name ?: ''})"
         // }
-
-        // flush()
     }
     class NodeData implements Comparable<NodeData> {
         public String id;
@@ -87,7 +75,7 @@ public class GlobalRunListener extends RunListener<Run<?, ?>> {
         public NodeData(FlowNode node) {
             this.id = node.getId();
             this.parent = node.getEnclosingId();
-            this.depth = node.getParentIds().size();
+            this.depth = node.getAllEnclosingIds().size();
             this.content = node;
             this.children = new ArrayList<NodeData>();
         }
@@ -96,7 +84,9 @@ public class GlobalRunListener extends RunListener<Run<?, ?>> {
             // if (this.parent == null || other.parent == null || this.parent == other.parent)
             //     return this.id.compareTo(other.id);
             // return this.parent.compareTo(other.parent);
-            return this.id.compareTo(other.id);
+            Integer i1 = (this.id == null) ? 0 : Integer.valueOf(this.id);
+            Integer i2 = (other.id == null) ? 0 : Integer.valueOf(other.id);
+            return i1.compareTo(i2);
         }
     }
 
@@ -116,6 +106,56 @@ public class GlobalRunListener extends RunListener<Run<?, ?>> {
     }
 
     String stringize(NodeData node) {
-        return String.format("sss: %s", node);
+        // String.repeat in java is crazy
+        String indent = String.join("", Collections.nCopies(node.depth, "   "));
+        // TODO: is explicit upcasting needed? need more java knowledge
+        StringBuilder str = new StringBuilder();
+        if (node.content instanceof StepStartNode) {
+            str.append(stringize_inner((StepStartNode)node.content));
+        }
+        else if (node.content instanceof StepEndNode) {
+            str.append(stringize_inner((StepEndNode)node.content));
+        }
+        else {
+            str.append(stringize_inner(node.content));
+        }
+        if (node.content instanceof StepEndNode) {
+            float dur = calcBlockDuration((StepEndNode)node.content) / 1000.0f;
+            str.append(String.format(" (took %.2f s)", dur));
+        }
+        for (Action act : node.content.getAllActions() ) {
+            if (act instanceof TimingAction || act instanceof LabelAction) {
+                // these are handled in stringize_inner
+                continue;
+            }
+            str.append(
+                String.format("\n%s    +%s", indent, act.getClass().getSimpleName())
+            );
+        }
+        return String.format("%s%s", indent, str.toString());
+    }
+
+    String stringize_inner(StepStartNode node) {
+        StringBuilder result = new StringBuilder(
+            String.format("{{{ #%s (from %s)", node.getId(), node.getEnclosingId())
+        );
+        LabelAction lbl = node.getAction(LabelAction.class);
+        if (lbl != null) {
+            result.append(' ');
+            result.append(lbl.getDisplayName());
+        }
+        result.append(String.format(" @ %s", getTime(node)));
+        return result.toString();
+    }
+    String stringize_inner(StepEndNode node) {
+        return String.format("}}} %s", node.getStartNode().getId());
+    }
+    String stringize_inner(FlowNode node) {
+        return String.format(
+            "--- #%s %s @ %s",
+            node.getId(),
+            node.getClass().getSimpleName(),
+            getTime(node)
+        );
     }
 }
