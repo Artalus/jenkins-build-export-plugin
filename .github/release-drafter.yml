@@ -1,0 +1,2 @@
+_extends: .github
+tag-template: jenkins-execution-reporter-$NEXT_MINOR_VERSION
