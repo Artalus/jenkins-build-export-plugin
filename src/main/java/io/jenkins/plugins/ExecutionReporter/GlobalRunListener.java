@@ -15,6 +15,7 @@ import org.jenkinsci.plugins.workflow.flow.FlowExecution;
 import org.jenkinsci.plugins.workflow.graph.*;
 import org.jenkinsci.plugins.workflow.graphanalysis.DepthFirstScanner;
 import org.jenkinsci.plugins.workflow.job.WorkflowRun;
+import org.jenkinsci.plugins.workflow.support.actions.LogStorageAction;
 
 @Extension
 public class GlobalRunListener extends RunListener<Run<?, ?>> {
@@ -50,7 +51,24 @@ public class GlobalRunListener extends RunListener<Run<?, ?>> {
         for (FlowNode node : scanner) {
             tree_data.add(new NodeData(node));
         }
-        Collections.sort(tree_data);
+        // TODO: this is slow and stupid
+        for (NodeData node : tree_data) {
+            if (node.parent == 0)
+                continue;
+            NodeData pt = tree_data.stream()
+                .filter(x -> x.id == node.parent)
+                .findAny()
+                .orElse(null);
+            if (pt == null) {
+                logger.warning(
+                    String.format("Could not find parent '%s' for node '%s'", node.parent, node.id)
+                );
+                continue;
+            }
+            pt.children.add(node);
+            node.parent_node = pt;
+        }
+        Collections.reverse(tree_data);
 
         StringBuilder builder = new StringBuilder();
         for (NodeData d : tree_data) {
@@ -66,27 +84,24 @@ public class GlobalRunListener extends RunListener<Run<?, ?>> {
         // println "- $it.name (${it.parameters.name ?: ''})"
         // }
     }
-    class NodeData implements Comparable<NodeData> {
-        public String id;
-        public String parent;
+    class NodeData {
+        public Long id;
+        public Long parent;
         public int depth;
         public ArrayList<NodeData> children;
+        public NodeData parent_node;
         public FlowNode content;
         public NodeData(FlowNode node) {
-            this.id = node.getId();
-            this.parent = node.getEnclosingId();
+            this.id = intize(node.getId());
+            this.parent = intize(node.getEnclosingId());
+            this.parent_node = null;
             this.depth = node.getAllEnclosingIds().size();
             this.content = node;
             this.children = new ArrayList<NodeData>();
         }
-        @Override
-        public int compareTo(NodeData other) {
-            // if (this.parent == null || other.parent == null || this.parent == other.parent)
-            //     return this.id.compareTo(other.id);
-            // return this.parent.compareTo(other.parent);
-            Integer i1 = (this.id == null) ? 0 : Integer.valueOf(this.id);
-            Integer i2 = (other.id == null) ? 0 : Integer.valueOf(other.id);
-            return i1.compareTo(i2);
+
+        private Long intize(String s) {
+            return s == null ? 0 : Long.valueOf(s);
         }
     }
 
@@ -103,6 +118,9 @@ public class GlobalRunListener extends RunListener<Run<?, ?>> {
 
     static long calcBlockDuration(StepEndNode end) {
         return getTs(end) - getTs(end.getStartNode());
+    }
+    static long calcInterval(FlowNode start, FlowNode end) {
+        return getTs(end) - getTs(start);
     }
 
     String stringize(NodeData node) {
@@ -131,6 +149,23 @@ public class GlobalRunListener extends RunListener<Run<?, ?>> {
             str.append(
                 String.format("\n%s    +%s", indent, act.getClass().getSimpleName())
             );
+            if (act instanceof WorkspaceAction ) {
+                String name = ((WorkspaceAction)act).getNode();
+                if (name == "")
+                    name = "master";
+                str.append(String.format(" - %s", name));
+                continue;
+            }
+            if (act instanceof BodyInvocationAction && node.content instanceof StepStartNode) {
+                FlowNode pt = node.parent_node.content;
+                WorkspaceAction ws = pt.getAction(WorkspaceAction.class);
+                if (ws != null) {
+                    str.append(String.format(" - node acquired after %.2f s",
+                        calcInterval(pt, node.content) / 1000.0f
+                    ));
+                }
+                continue;
+            }
         }
         return String.format("%s%s", indent, str.toString());
     }
@@ -152,7 +187,7 @@ public class GlobalRunListener extends RunListener<Run<?, ?>> {
     }
     String stringize_inner(FlowNode node) {
         return String.format(
-            "--- #%s %s @ %s",
+            "--> #%s %s @ %s",
             node.getId(),
             node.getClass().getSimpleName(),
             getTime(node)
