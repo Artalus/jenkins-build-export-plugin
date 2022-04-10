@@ -12,23 +12,23 @@ import org.kohsuke.stapler.QueryParameter;
  * Example of Jenkins global configuration.
  */
 @Extension
-public class SampleConfiguration extends GlobalConfiguration {
+public class ExecutionReporterGlobalConfig extends GlobalConfiguration {
 
     /** @return the singleton instance */
-    public static SampleConfiguration get() {
-        return ExtensionList.lookupSingleton(SampleConfiguration.class);
+    public static ExecutionReporterGlobalConfig get() {
+        return ExtensionList.lookupSingleton(ExecutionReporterGlobalConfig.class);
     }
 
-    private String label;
+    private String postUrl;
 
-    public SampleConfiguration() {
+    public ExecutionReporterGlobalConfig() {
         // When Jenkins is restarted, load any saved configuration from disk.
         load();
     }
 
     /** @return the currently configured label, if any */
-    public String getLabel() {
-        return label;
+    public String getPostUrl() {
+        return postUrl;
     }
 
     /**
@@ -36,14 +36,14 @@ public class SampleConfiguration extends GlobalConfiguration {
      * @param label the new value of this field
      */
     @DataBoundSetter
-    public void setLabel(String label) {
-        this.label = label;
+    public void setPostUrl(String value) {
+        this.postUrl = value;
         save();
     }
 
-    public FormValidation doCheckLabel(@QueryParameter String value) {
+    public FormValidation doCheckPostUrl(@QueryParameter String value) {
         if (StringUtils.isEmpty(value)) {
-            return FormValidation.warning("Please specify a label.");
+            return FormValidation.warning("Please specify a URL.");
         }
         return FormValidation.ok();
     }

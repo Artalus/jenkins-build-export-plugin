@@ -48,10 +48,11 @@ public class GlobalRunListener extends RunListener<Run<?, ?>> {
         }
         PostData pd = new PostData(b);
         // TODO: move all this to constructor?
+        // TODO: need postUrl emptiness check
         pd.nodes = NodeData.transform(nodes);
         Poster.post(
             pd,
-            "https://webhook.site/d3972857-2f07-42f4-8ea3-931f6194dd87"
+            ExecutionReporterGlobalConfig.get().getPostUrl()
         );
     }
 }
