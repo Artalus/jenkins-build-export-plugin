@@ -25,7 +25,6 @@ class Poster {
         Gson gson = new Gson();
         String json = gson.toJson(data);
 
-
         CloseableHttpClient httpclient = HttpClients.createDefault();
         try {
             HttpPost httpPost = new HttpPost(url);
