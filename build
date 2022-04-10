@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -e
 docker compose exec maven mvn compile
 docker compose exec maven mvn hpi:hpi
