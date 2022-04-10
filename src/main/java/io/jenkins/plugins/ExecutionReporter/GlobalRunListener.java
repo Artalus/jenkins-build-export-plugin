@@ -51,60 +51,9 @@ public class GlobalRunListener extends RunListener<Run<?, ?>> {
         for (FlowNode node : scanner) {
             tree_data.add(new NodeData(node));
         }
-        // TODO: this is slow and stupid
-        for (NodeData node : tree_data) {
-            if (node.parent == 0)
-                continue;
-            NodeData pt = tree_data.stream()
-                .filter(x -> x.id == node.parent)
-                .findAny()
-                .orElse(null);
-            if (pt == null) {
-                logger.warning(
-                    String.format("Could not find parent '%s' for node '%s'", node.parent, node.id)
-                );
-                continue;
-            }
-            pt.children.add(node);
-            node.parent_node = pt;
-        }
-        Collections.reverse(tree_data);
 
-        StringBuilder builder = new StringBuilder();
-        for (NodeData d : tree_data) {
-            builder.append('\n');
-            builder.append(stringize(d));
-        }
-        logger.info(
-            String.format("Build tree is:%s", builder.toString())
-        );
-
-        // println "---"
-        // NNN.class.methods.each {
-        // println "- $it.name (${it.parameters.name ?: ''})"
-        // }
+        Poster.post(tree_data, "https://webhook.site/d3972857-2f07-42f4-8ea3-931f6194dd87");
     }
-    class NodeData {
-        public Long id;
-        public Long parent;
-        public int depth;
-        public ArrayList<NodeData> children;
-        public NodeData parent_node;
-        public FlowNode content;
-        public NodeData(FlowNode node) {
-            this.id = intize(node.getId());
-            this.parent = intize(node.getEnclosingId());
-            this.parent_node = null;
-            this.depth = node.getAllEnclosingIds().size();
-            this.content = node;
-            this.children = new ArrayList<NodeData>();
-        }
-
-        private Long intize(String s) {
-            return s == null ? 0 : Long.valueOf(s);
-        }
-    }
-
     static long getTs(FlowNode node) {
         return node.getAction(TimingAction.class).getStartTime();
     }
