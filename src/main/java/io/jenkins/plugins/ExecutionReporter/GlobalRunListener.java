@@ -46,9 +46,11 @@ public class GlobalRunListener extends RunListener<Run<?, ?>> {
         for (FlowNode node : scanner) {
             nodes.add(node);
         }
-
+        PostData pd = new PostData(b);
+        // TODO: move all this to constructor?
+        pd.nodes = NodeData.transform(nodes);
         Poster.post(
-            NodeData.transform(nodes),
+            pd,
             "https://webhook.site/d3972857-2f07-42f4-8ea3-931f6194dd87"
         );
     }

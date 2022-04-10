@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 class Poster {
     private static final Logger logger = Logger.getLogger(Poster.class.getName());
 
-    public static void post(ArrayList<NodeData> data, String url) {
+    public static void post(PostData data, String url) {
         Gson gson = new Gson();
         String json = gson.toJson(data);
 

@@ -46,7 +46,7 @@ class NodeData {
         for (Action a : node.getAllActions() ) {
             if (a instanceof TimingAction)
                 continue;
-            if (a instanceof LogStorageAction)
+            if (a instanceof LogAction)
                 continue;
             actions.add(new ActionData(a));
         }
@@ -92,13 +92,14 @@ class ActionData {
             String name = ((WorkspaceAction)a).getNode();
             if (name == "")
                 name = "master";
-            this.data = new HashMap<String, Object>();
-            data.put("node", name);
-            return
+            Map<String, Object> m = new HashMap<String, Object>();
+            m.put("node", name);
+            this.data = m;
+            return;
         }
         if (a instanceof ArgumentsAction) {
             this.data = ((ArgumentsAction)a).getFilteredArguments();
-            return
+            return;
         }
     }
 }
