@@ -98,7 +98,20 @@ class ActionData {
             return;
         }
         if (a instanceof ArgumentsAction) {
-            this.data = ((ArgumentsAction)a).getFilteredArguments();
+            // TODO: seems that secrets do not leak, but make sure
+            this.data = ((ArgumentsAction)a).getArguments();
+            return;
+        }
+        if (a instanceof LabelAction) {
+            this.data = ((LabelAction)a).getDisplayName();
+            return;
+        }
+        if (a instanceof ErrorAction) {
+            // Sending more details about ErrorAction could expose secrets in unpredictable way, e.g.
+            // pipeline failing in `echo params.PASSWORD` results in such `.getError().getMessage()`:
+            //     Could not instantiate {message=SuperSecretText} for o.j.p.w.steps.EchoStep
+            // , which is clearly a leak
+            this.data = ((ErrorAction)a).getError().getClass().toString();
             return;
         }
     }
