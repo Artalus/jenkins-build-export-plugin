@@ -1,4 +1,4 @@
-package io.jenkins.plugins.executionreporter;
+package artalus.plugins.executionreporter;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;

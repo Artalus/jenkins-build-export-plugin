@@ -1,4 +1,4 @@
-package io.jenkins.plugins.executionreporter;
+package artalus.plugins.executionreporter;
 import java.util.*;
 import hudson.model.*;
 

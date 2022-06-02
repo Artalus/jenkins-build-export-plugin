@@ -7,7 +7,7 @@
         <version>4.32</version>
         <relativePath />
     </parent>
-    <groupId>io.jenkins.plugins</groupId>
+    <groupId>artalus.plugins</groupId>
     <artifactId>jenkins-execution-reporter</artifactId>
     <version>${revision}${changelist}</version>
     <packaging>hpi</packaging>

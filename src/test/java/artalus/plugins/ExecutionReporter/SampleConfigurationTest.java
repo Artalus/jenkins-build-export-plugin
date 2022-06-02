@@ -1,4 +1,4 @@
-package io.jenkins.plugins.executionreporter;
+package artalus.plugins.executionreporter;
 
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
