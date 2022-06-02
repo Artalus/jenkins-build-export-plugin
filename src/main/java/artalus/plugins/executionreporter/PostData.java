@@ -21,9 +21,14 @@ class PostData {
         ParametersAction p = run.getAction(ParametersAction.class);
         if (p != null) {
             for (ParameterValue pv : p.getAllParameters()) {
-                String v = pv.isSensitive() ? "*CENSORED*" : pv.getValue().toString();
-                this.buildParameters.put(pv.getName(), v);
+                this.buildParameters.put(pv.getName(), censored(pv));
             }
         }
+    }
+
+    // TODO: if ParameterValue itself exists, it should have value. am i wrong?
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
+    private static String censored(ParameterValue pv) {
+        return pv.isSensitive() ? "*CENSORED*" : pv.getValue().toString();
     }
 }

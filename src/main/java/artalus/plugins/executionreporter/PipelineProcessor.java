@@ -16,6 +16,12 @@ public class PipelineProcessor {
             String.format("[ExecutionReporter] Traversing build: %s", b)
         );
         FlowExecution e = b.getExecution();
+        if (e == null) {
+            logger.severe(
+                String.format("[ExecutionReporter] Failed to acquire FlowExecution for build %s", b)
+            );
+            return;
+        }
         ArrayList<FlowNode> nodes = new ArrayList<FlowNode>();
 
         DepthFirstScanner scanner = new DepthFirstScanner();
