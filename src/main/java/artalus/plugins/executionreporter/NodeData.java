@@ -9,6 +9,8 @@ import org.jenkinsci.plugins.workflow.actions.*;
 import org.jenkinsci.plugins.workflow.actions.WorkspaceAction;
 import org.jenkinsci.plugins.workflow.actions.ArgumentsAction;
 
+// this class is exported as json to the outside world, its fields are allowed to be unread
+@edu.umd.cs.findbugs.annotations.SuppressWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 class NodeData {
     enum NodeType {
         Unknown,
@@ -80,6 +82,8 @@ class NodeData {
     }
 }
 
+// this class is exported as json to the outside world, its fields are allowed to be unread
+@edu.umd.cs.findbugs.annotations.SuppressWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
 class ActionData {
     public String type;
     public String fullType;
