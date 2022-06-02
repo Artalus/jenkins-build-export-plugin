@@ -94,7 +94,7 @@ class ActionData {
     void fillData(Action a) {
         if (a instanceof WorkspaceAction) {
             String name = ((WorkspaceAction)a).getNode();
-            if (name == "")
+            if (name.equals(""))
                 name = "master";
             Map<String, Object> m = new HashMap<String, Object>();
             m.put("node", name);
