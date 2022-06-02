@@ -35,7 +35,11 @@ class NodeData {
         this.enclosing = node.getEnclosingId();
         this.type = parseType(node);
         this.depth = node.getAllEnclosingIds().size();
-        this.parents = node.getParentIds();
+        List<FlowNode> parents = node.getParents();
+        this.parents = new ArrayList<String>(parents.size());
+        for (FlowNode p : parents) {
+            this.parents.add(p.getId());
+        }
         this.enclosings = node.getAllEnclosingIds();
         this.actions = new ArrayList<ActionData>();
 
