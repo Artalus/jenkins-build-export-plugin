@@ -8,7 +8,7 @@
         <relativePath />
     </parent>
     <groupId>artalus.plugins</groupId>
-    <artifactId>jenkins-execution-reporter</artifactId>
+    <artifactId>jenkins-build-export</artifactId>
     <version>${revision}${changelist}</version>
     <packaging>hpi</packaging>
     <name>TODO Plugin</name>

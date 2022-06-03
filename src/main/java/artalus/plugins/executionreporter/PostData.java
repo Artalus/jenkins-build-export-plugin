@@ -1,4 +1,4 @@
-package artalus.plugins.executionreporter;
+package artalus.plugins.buildexport;
 import java.util.*;
 import hudson.model.*;
 

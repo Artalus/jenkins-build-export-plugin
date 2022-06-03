@@ -1,4 +1,4 @@
-package artalus.plugins.executionreporter;
+package artalus.plugins.buildexport;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -46,13 +46,13 @@ class Poster {
             }
         } catch (Exception e) {
             logger.severe(
-                String.format("[ExecutionReporter] Failed POST: %s", e)
+                String.format("[BuildExport] Failed POST: %s", e)
             );
         } finally {
             try {
                 httpclient.close();
             } catch (java.io.IOException e) {
-                logger.severe("[ExecutionReporter] failed to close httpclient, omg java sucks");
+                logger.severe("[BuildExport] failed to close httpclient, omg java sucks");
             }
         }
     }

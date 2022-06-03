@@ -1,4 +1,4 @@
-package artalus.plugins.executionreporter;
+package artalus.plugins.buildexport;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
@@ -13,12 +13,12 @@ public class PipelineProcessor {
 
     public static void doMagic(WorkflowRun b) {
         logger.fine(
-            String.format("[ExecutionReporter] Traversing build: %s", b)
+            String.format("[BuildExport] Traversing build: %s", b)
         );
         FlowExecution e = b.getExecution();
         if (e == null) {
             logger.severe(
-                String.format("[ExecutionReporter] Failed to acquire FlowExecution for build %s", b)
+                String.format("[BuildExport] Failed to acquire FlowExecution for build %s", b)
             );
             return;
         }
@@ -27,7 +27,7 @@ public class PipelineProcessor {
         DepthFirstScanner scanner = new DepthFirstScanner();
         if (!scanner.setup(e.getCurrentHeads())) {
             logger.severe(
-                String.format("[ExecutionReporter] Failed to setup a scanner for build %s", b)
+                String.format("[BuildExport] Failed to setup a scanner for build %s", b)
             );
             return;
         }
@@ -40,7 +40,7 @@ public class PipelineProcessor {
         pd.nodes = NodeData.transform(nodes);
         Poster.post(
             pd,
-            ExecutionReporterGlobalConfig.get().getPostUrl()
+            BuildExportGlobalConfig.get().getPostUrl()
         );
     }
 }

@@ -1,4 +1,4 @@
-package artalus.plugins.executionreporter;
+package artalus.plugins.buildexport;
 
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;

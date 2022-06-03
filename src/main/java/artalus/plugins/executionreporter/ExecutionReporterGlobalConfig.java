@@ -1,4 +1,4 @@
-package artalus.plugins.executionreporter;
+package artalus.plugins.buildexport;
 
 import hudson.Extension;
 import hudson.ExtensionList;
@@ -12,16 +12,16 @@ import org.kohsuke.stapler.QueryParameter;
  * Example of Jenkins global configuration.
  */
 @Extension
-public class ExecutionReporterGlobalConfig extends GlobalConfiguration {
+public class BuildExportGlobalConfig extends GlobalConfiguration {
 
     /** @return the singleton instance */
-    public static ExecutionReporterGlobalConfig get() {
-        return ExtensionList.lookupSingleton(ExecutionReporterGlobalConfig.class);
+    public static BuildExportGlobalConfig get() {
+        return ExtensionList.lookupSingleton(BuildExportGlobalConfig.class);
     }
 
     private String postUrl;
 
-    public ExecutionReporterGlobalConfig() {
+    public BuildExportGlobalConfig() {
         // When Jenkins is restarted, load any saved configuration from disk.
         load();
     }

@@ -1,4 +1,4 @@
-package artalus.plugins.executionreporter;
+package artalus.plugins.buildexport;
 
 import hudson.Extension;
 import hudson.model.listeners.RunListener;
@@ -14,11 +14,9 @@ public class GlobalRunListener extends RunListener<Run<?, ?>> {
 
     @Override
     public void onCompleted(Run<?, ?> build, TaskListener listener) {
-        // listener.getLogger().println("[ExecutionReporter] println");
-
         if (!(build instanceof WorkflowRun)) {
             logger.fine(
-                String.format("[ExecutionReporter] Ignoring build %s: not a WorkflowRun", build)
+                String.format("[BuildExport] Ignoring build %s: not a WorkflowRun", build)
             );
             return;
         }

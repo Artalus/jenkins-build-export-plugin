@@ -1,2 +1,2 @@
 _extends: .github
-tag-template: jenkins-execution-reporter-$NEXT_MINOR_VERSION
+tag-template: jenkins-build-export-$NEXT_MINOR_VERSION
