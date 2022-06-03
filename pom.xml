@@ -41,7 +41,7 @@
         <java.level>8</java.level>
         <gitHubRepo>jenkinsci/${project.artifactId}-plugin</gitHubRepo>
 
-        <workflow-api.version>2.47</workflow-api.version>
+        <workflow-api.version>1164.v760c223ddb_32</workflow-api.version>
         <workflow-job.version>2.42</workflow-job.version>
         <workflow-cps.version>2.94.1</workflow-cps.version>
     </properties>
