@@ -1,6 +1,11 @@
 # Automates creation of Release Drafts using Release Drafter
 # More Info: https://github.com/jenkinsci/.github/blob/master/.github/release-drafter.adoc
 
+# TODO: broken workflow created by default by maven
+# Error: Invalid config file
+# ValidationError: child "template" fails because ["template" is required]
+# Config validation errors, please fix the following issues in release-drafter.yml
+
 on:
   push:
     branches:
