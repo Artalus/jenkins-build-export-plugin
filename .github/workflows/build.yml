@@ -1,0 +1,22 @@
+name: Build plugin
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+#     - run: docker-compose up -d
+#     - run: docker-compose exec -t maven mvn clean verify
+    - run: mvn compile
+    - run: mvn hpi:hpi
+    - run: ls -la target
+    - uses: actions/upload-artifact@v3
+      with:
+        name: plugin
+        path: target/*.hpi
