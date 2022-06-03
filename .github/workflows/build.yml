@@ -21,7 +21,12 @@ jobs:
     - run: mvn compile
     - run: mvn hpi:hpi
     - run: ls -la target
+    - run: >
+        curl
+        -H "Max-Days: 1"
+        --upload-file target/jenkins-build-export.hpi
+        https://transfer.sh/jenkins-build-export.hpi
     - uses: actions/upload-artifact@v3
       with:
         name: plugin
-        path: target/*.hpi
+        path: target/jenkins-build-export.hpi
