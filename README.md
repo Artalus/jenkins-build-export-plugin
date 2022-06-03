@@ -1,4 +1,4 @@
-# jenkins-execution-reporter
+# jenkins-build-export
 
 ## Introduction
 
@@ -44,7 +44,7 @@ This will launch Jenkins on http://localhost:8080, where you can configure the p
 
 ## Getting started
 
-Go to Jenkins configuration, find section `Execution Reporter` and provide a URL to which send POSTs.
+Go to Jenkins configuration, find section `Build Export` and provide a URL to which send POSTs.
 If you simply want to see what is going on and how the payload looks, you can use any echo server or global webhook service to display request contents (see https://webhook.site for example).
 
 After the URL is provided, the plugin will POST about any newly finished builds.
@@ -60,7 +60,7 @@ Example:
 ```groovy
 // do not blindly run examples from the interwebz in Script Console
 // without understanding what they do! :E
-import artalus.plugins.executionreporter.PipelineProcessor
+import artalus.plugins.buildexport.PipelineProcessor
 def JOBS = 'ci/build-cpp/'
 
 Jenkins.instance.getAllItems(Job)
