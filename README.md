@@ -58,20 +58,83 @@ You can use Jenkins Script Console or another Pipeline job for that.
 
 Example:
 ```groovy
-// do not blindly run examples from the interwebz in Script Console
-// without understanding what they do! :E
+// do not blindly run code from the interwebz in Script Console without understanding what it does! :E
 import artalus.plugins.buildexport.PipelineProcessor
 def JOBS = 'ci/build-cpp/'
 
 Jenkins.instance.getAllItems(Job)
-.findAll { it.fullName.startsWith(B) }
+.findAll { it.fullName.startsWith(JOBS) }
 .collect { it.builds }
 .flatten()
 .findAll { ! it.isBuilding() }
 .each { PipelineProcessor.doMagic(it) }
 ```
 This will find all jobs in folder `ci/build-cpp/`, iterate over their builds, and run export procedure for each.
-Be aware that it is not an intended/optimized way to use plugin, and will take time for jobs with large history.
+Be aware that it is **NOT** an intended/optimized way to use the plugin.
+Manually exporting old builds will take a lot of time for jobs with large history, during which the Script Console will "hang".
+
+<details>
+  <summary>See JSON example</summary>
+```
+{
+  "job": "zzz",
+  "buildName": "#2",
+  "buildFullName": "zzz #2",
+  "buildNumber": 2,
+  "buildParameters": {},
+  "nodes": [
+    {
+      "id": "4",
+      "timestamp": 1654298573010,
+      "type": "FlowEnd",
+      "depth": 0,
+      "parents": [
+        "3"
+      ],
+      "enclosings": [],
+      "startNode": "2",
+      "actions": []
+    },
+    {
+      "id": "3",
+      "timestamp": 1654298572989,
+      "enclosing": "2",
+      "type": "StepAtom",
+      "depth": 1,
+      "parents": [
+        "2"
+      ],
+      "enclosings": [
+        "2"
+      ],
+      "actions": [
+        {
+          "type": "ArgumentsActionImpl",
+          "fullType": "org.jenkinsci.plugins.workflow.cps.actions.ArgumentsActionImpl",
+          "data": {
+            "message": "hi"
+          }
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "timestamp": 1654298572947,
+      "type": "FlowStart",
+      "depth": 0,
+      "parents": [],
+      "enclosings": [],
+      "actions": []
+    }
+  ]
+}
+```
+It corresponds to a simplest pipeline containing only `echo "hi"` and represents this execution tree with nodes numbered:
+```
+{ #2 FlowStart
+    echo "hi" #4 StepAtom
+} #3 FlowEnd
+</details>
 
 ## Contributing
 
