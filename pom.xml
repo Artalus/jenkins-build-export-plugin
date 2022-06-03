@@ -43,7 +43,7 @@
 
         <workflow-api.version>2.47</workflow-api.version>
         <workflow-job.version>2.42</workflow-job.version>
-        <workflow-cps.version>2.94.1</workflow-cps.version>
+        <workflow-cps.version>2.94.4</workflow-cps.version>
     </properties>
 
     <dependencyManagement>
