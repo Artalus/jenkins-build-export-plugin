@@ -1,6 +1,7 @@
 package artalus.plugins.buildexport;
 import java.util.*;
 import hudson.model.*;
+import jenkins.model.Jenkins;
 
 // this class is exported as json to the outside world, its fields are allowed to be unread
 @edu.umd.cs.findbugs.annotations.SuppressWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
@@ -8,6 +9,7 @@ class PostData {
     public String job;
     public String buildName;
     public String buildFullName;
+    public String buildUrl;
     public int buildNumber;
     public Map<String, String> buildParameters;
     public ArrayList<NodeData> nodes;
@@ -16,6 +18,7 @@ class PostData {
         this.job = run.getParent().getFullName();
         this.buildName = run.getDisplayName();
         this.buildFullName = run.getFullDisplayName();
+        this.buildUrl = String.format("%s%s", Jenkins.get().getRootUrl(), run.getUrl());
         this.buildNumber = run.getNumber();
         this.buildParameters = new HashMap<String, String>();
         ParametersAction p = run.getAction(ParametersAction.class);
