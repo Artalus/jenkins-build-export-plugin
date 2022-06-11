@@ -21,7 +21,7 @@ class PostData {
         this.buildFullName = run.getFullDisplayName();
         this.buildUrl = String.format("%s%s", Jenkins.get().getRootUrl(), run.getUrl());
         this.buildNumber = run.getNumber();
-        this.buildResult = run.getResult().toString();
+        this.buildResult = getResultString(run);
 
         this.buildParameters = new HashMap<String, String>();
         ParametersAction p = run.getAction(ParametersAction.class);
@@ -36,5 +36,16 @@ class PostData {
     @edu.umd.cs.findbugs.annotations.SuppressWarnings("NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE")
     private static String censored(ParameterValue pv) {
         return pv.isSensitive() ? "*CENSORED*" : pv.getValue().toString();
+    }
+
+    private static String getResultString(Run<?,?> run) {
+        Result r = run.getResult();
+        if (r == null) {
+            throw new RuntimeError(String.format(
+                "Result of %s is null; cannot construct PostData of a still running build",
+                run.getDisplayName()
+            ));
+        }
+        return r.toString()
     }
 }
