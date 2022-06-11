@@ -54,8 +54,6 @@ If you want to "export" old pre-existing builds in the same manner, you will hav
 It is done using `PipelineProcessor` class and its static `doMagic` method, which accepts a `WorkflowRun` object describing your finished build.
 You can use Jenkins Script Console or another Pipeline job for that.
 
-> TODO: make sure example works
-
 Example:
 ```groovy
 // do not blindly run code from the interwebz in Script Console without understanding what it does! :E
@@ -75,6 +73,7 @@ Manually exporting old builds will take a lot of time for jobs with large histor
 
 <details>
   <summary>See JSON example</summary>
+  
 ```
 {
   "job": "zzz",
@@ -134,6 +133,8 @@ It corresponds to a simplest pipeline containing only `echo "hi"` and represents
 { #2 FlowStart
     echo "hi" #4 StepAtom
 } #3 FlowEnd
+```
+
 </details>
 
 ## Contributing
