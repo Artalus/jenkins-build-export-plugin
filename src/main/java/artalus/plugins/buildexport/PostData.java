@@ -46,6 +46,6 @@ class PostData {
                 run.getDisplayName()
             ));
         }
-        return r.toString()
+        return r.toString();
     }
 }
