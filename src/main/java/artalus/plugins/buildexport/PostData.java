@@ -41,7 +41,7 @@ class PostData {
     private static String getResultString(Run<?,?> run) {
         Result r = run.getResult();
         if (r == null) {
-            throw new RuntimeError(String.format(
+            throw new IllegalArgumentException(String.format(
                 "Result of %s is null; cannot construct PostData of a still running build",
                 run.getDisplayName()
             ));
