@@ -42,7 +42,7 @@
         <gitHubRepo>Artalus/${project.artifactId}-plugin</gitHubRepo>
 
         <workflow-api.version>2.47</workflow-api.version>
-        <workflow-job.version>2.42</workflow-job.version>
+        <workflow-job.version>1203.v7b_7023424efe</workflow-job.version>
         <workflow-cps.version>2.94.1</workflow-cps.version>
     </properties>
 
